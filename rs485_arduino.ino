@@ -1,11 +1,3 @@
-/*
- * RS485 Master Software
- * Exercise the MAX485 Module.  This code runs on the first (Master)device.
- * Use the RS485_Slave_Test software for the second (Slave) device
- * This uses the SoftSerial.h library which comes with the Arduino IDE
- * Pins used for the soft serial port are fairly arbitrary and can be changed
- * as needed.  Just redefine them below.
- */
 #include <SoftwareSerial.h>
 const int SSERIAL_RX_PIN = 10;  //Soft Serial Receive pin
 const int SSERIAL_TX_PIN = 11;  //Soft Serial Transmit pin
@@ -14,13 +6,10 @@ const int LED_PIN = 13;
 const int RS485_TRANSMIT = HIGH;
 const int RS485_RECEIVE = LOW;
 
-// Create Soft Serial Port object and define pins to use
 SoftwareSerial RS485Serial(SSERIAL_RX_PIN, SSERIAL_TX_PIN); // RX, TX
 
 int byteReceived;
-//===============================================================================
-//  Initialization
-//===============================================================================
+
 void setup()
 {
   Serial.begin(9600);           // Start the built-in serial port
@@ -34,9 +23,7 @@ void setup()
   
   RS485Serial.begin(9600);   // Start the RS485 soft serial port 
 }
-//===============================================================================
-//  Main
-//===============================================================================
+
 void loop() 
 {
   if (Serial.available())         // A char(byte) has been entered in the Serial Monitor
