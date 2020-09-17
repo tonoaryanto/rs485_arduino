@@ -12,7 +12,7 @@ int byteReceived;
 
 void setup()
 {
-  Serial.begin(2400);           // Start the built-in serial port
+  Serial.begin(9600);           // Start the built-in serial port
   Serial.println("Master Device");
   Serial.println("Type in upper window, press ENTER");
   
@@ -21,7 +21,7 @@ void setup()
   
   digitalWrite(SSERIAL_CTRL_PIN, RS485_RECEIVE);  // Put RS485 in receive mode  
   
-  RS485Serial.begin(2400);   // Start the RS485 soft serial port 
+  RS485Serial.begin(9600);   // Start the RS485 soft serial port 
 }
 
 void loop() 
@@ -30,6 +30,10 @@ void loop()
   {
     byteReceived = Serial.read();                   // Read the byte
     digitalWrite(SSERIAL_CTRL_PIN, RS485_TRANSMIT);  // Put RS485 in Transmit mode   
+
+//    byte message[] = {0xff, 0xff, 0x25, 0x54, 0x39, 0x30, 0x31, 0x52, 0x38, 0x30, 0x30, 0x20, 0x32, 0x34, 0x38, 0x0d };
+//    RS485Serial.write(message, sizeof(message));    
+
     RS485Serial.write(byteReceived);                 // Send byte to Remote Arduino
     //    delay(1);                                        // Wait before going back to Receive mode
     digitalWrite(SSERIAL_CTRL_PIN, RS485_RECEIVE);   // Put RS485 back into Receive mode    
