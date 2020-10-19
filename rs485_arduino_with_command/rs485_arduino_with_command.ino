@@ -18,7 +18,7 @@ const int SSERIAL_CTRL_PIN= 3;  //RS485 Direction control
 const int LED_PIN = 13;
 const int RS485_TRANSMIT = HIGH;
 const int RS485_RECEIVE = LOW;
-int LEDmerah1 = 4, LEDmerah2 = 5, LEDmerah3 = 6; //Set Pin LED
+int LEDmerah1 = 5, LEDmerah2 = 6, LEDmerah3 = 4; //Set Pin LED
 SoftwareSerial RS485Serial(SSERIAL_RX_PIN, SSERIAL_TX_PIN); // RX, TX
 DS3231  rtc(SDA, SCL); // inisialisasi penggunaan i2c
 
@@ -28,7 +28,7 @@ int i = 0;
 int J = 0;
 int star = 0;
 int akhir = 0;
-byte message[20][18] = {
+byte message[22][18] = {
     {0xff, 0xff, 0x25, 0x54, 0x39, 0x30, 0x31, 0x52, 0x34, 0x30, 0x39, 0x36, 0x20, 0x35, 0x31, 0x0d },
     {0xff, 0xff, 0x25, 0x54, 0x39, 0x30, 0x31, 0x52, 0x37, 0x32, 0x31, 0x38, 0x20, 0x35, 0x30, 0x0d },
     {0xff, 0xff, 0x25, 0x54, 0x39, 0x30, 0x31, 0x52, 0x37, 0x31, 0x39, 0x37, 0x20, 0x35, 0x36, 0x0d },
@@ -48,7 +48,9 @@ byte message[20][18] = {
     {0xff, 0xff, 0x25, 0x54, 0x39, 0x30, 0x31, 0x52, 0x33, 0x31, 0x37, 0x30, 0x20, 0x34, 0x33, 0x0d },
     {0xff, 0xff, 0x25, 0x54, 0x39, 0x30, 0x31, 0x52, 0x33, 0x37, 0x30, 0x38, 0x20, 0x35, 0x30, 0x0d },
     {0xff, 0xff, 0x25, 0x54, 0x39, 0x30, 0x31, 0x52, 0x31, 0x33, 0x30, 0x32, 0x20, 0x33, 0x38, 0x0d },
-    {0xff, 0xff, 0x25, 0x54, 0x39, 0x30, 0x31, 0x52, 0x31, 0x33, 0x30, 0x31, 0x20, 0x33, 0x37, 0x0d }
+    {0xff, 0xff, 0x25, 0x54, 0x39, 0x30, 0x31, 0x52, 0x31, 0x33, 0x30, 0x31, 0x20, 0x33, 0x37, 0x0d },
+    {0xff, 0xff, 0x25, 0x54, 0x39, 0x30, 0x31, 0x52, 0x36, 0x32, 0x30, 0x30, 0x31, 0x20, 0x38, 0x39, 0x0d },
+    {0xff, 0xff, 0x25, 0x54, 0x39, 0x30, 0x31, 0x52, 0x36, 0x32, 0x30, 0x30, 0x32, 0x20, 0x39, 0x30, 0x0d }
 };
 
 Time t;
@@ -233,7 +235,7 @@ void getDataCom(){
       if(akhir == 1){
         if(loopdt != ""){
           akhir = 0;
-          if( i < 20){
+          if( i < 22){
             star = 1;
             loopdt = loopdt + "x";
             delay(50);
@@ -251,7 +253,7 @@ void getDataCom(){
               Serial.print("Connect to ");
               Serial.println(client.remoteIP());
               // Make a HTTP request:
-              client.print("GET /apitest/rcdata/dhouse?69646661726d=1&6964686f757365=1");
+              client.print("GET /apidboansell/rcdata/dhouse?69646661726d=1&6964686f757365=1");
               client.print("&a64617461=");
               client.print(loopdt);
               client.println(" HTTP/1.1");
@@ -281,6 +283,7 @@ void getDataCom(){
             // if the server's disconnected, stop the client:
             if (!client.connected()) {
               String wpart = wdata.substring((wdata.indexOf("'")));
+              Serial.println(wpart);
               if(wpart == "'OK'"){
                 digitalWrite(LEDmerah2, HIGH); //LEDmerah2 Nyala
                 Serial.println("Data Terkirim");
@@ -307,7 +310,7 @@ void setnettime(){
             char server2[] = "apidbo.anselljaya.com";
             if (client.connect(server2, 80)) {
               digitalWrite(LEDmerah2, HIGH); //LEDmerah2 Nyala
-              Serial.print("Connect to ");
+              Serial.print("Menghubungkan ke ");
               Serial.println(client.remoteIP());
               // Make a HTTP request:
               client.println("GET /rcdata/nettime HTTP/1.1");
@@ -317,7 +320,7 @@ void setnettime(){
             } else {
               // if you couldn't make a connection:
               digitalWrite(LEDmerah2, LOW); //LEDmerah1 mati
-              Serial.println("connection failed");
+              Serial.println("Memutuskan hubungan");
             }
             //End Run Ethernet
           
@@ -331,8 +334,6 @@ void setnettime(){
             // if the server's disconnected, stop the client:
             if (!client.connected()) {
               String wpart = wdata.substring((wdata.indexOf("'")));
-              Serial.println("Data ");
-              Serial.println(wdata);
               String part2 = wpart.substring(1,3);
               String part3 = wpart.substring(3,5);
               int jam = part2.toInt();
