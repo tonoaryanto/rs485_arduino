@@ -5,7 +5,8 @@
 
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 
-IPAddress server(192,168,1,200);  // numeric IP for Google (no DNS)
+//IPAddress server(192,168,1,200);  // numeric IP for Google (no DNS)
+char server[] = "apidbo.anselljaya.com";
 
 IPAddress ip(192, 168, 1, 90);
 IPAddress myDns(192, 168, 1, 1);
@@ -71,25 +72,8 @@ void setup(){
  pinMode(LEDmerah3, OUTPUT); //Set LEDhijau sebagai output
 //Setup Ethernet
               digitalWrite(LEDmerah3, HIGH); //LEDmerah1 mati
-              delay(500);
+              delay(1000);
               digitalWrite(LEDmerah3, LOW); //LEDmerah1 mati
-              delay(500);
-              digitalWrite(LEDmerah3, HIGH); //LEDmerah1 mati
-              delay(500);
-              digitalWrite(LEDmerah3, LOW); //LEDmerah1 mati
-              delay(500);
-              digitalWrite(LEDmerah3, HIGH); //LEDmerah1 mati
-              delay(500);
-              digitalWrite(LEDmerah3, LOW); //LEDmerah1 mati
-              delay(500);
-              digitalWrite(LEDmerah3, HIGH); //LEDmerah1 mati
-              delay(500);
-              digitalWrite(LEDmerah3, LOW); //LEDmerah1 mati
-              delay(500);
-              digitalWrite(LEDmerah3, HIGH); //LEDmerah1 mati
-              delay(500);
-              digitalWrite(LEDmerah3, LOW); //LEDmerah1 mati
-              delay(500);
 
             if (Ethernet.begin(mac) == 0) {
               digitalWrite(LEDmerah1, HIGH); //LEDmerah1 mati
@@ -236,6 +220,7 @@ void getDataCom(){
         if(loopdt != ""){
           akhir = 0;
           if( i < 22){
+            Serial.println(i);
             star = 1;
             loopdt = loopdt + "x";
             delay(50);
@@ -248,16 +233,17 @@ void getDataCom(){
             
 //Run Ethernet
             // if there's a successful connection:
+             Serial.println("Menghubungkan ke Webserver");
             if (client.connect(server, 80)) {
               digitalWrite(LEDmerah1, HIGH); //LEDmerah1 Nyala
-              Serial.print("Connect to ");
+              Serial.print("Terhubung dengan ");
               Serial.println(client.remoteIP());
               // Make a HTTP request:
-              client.print("GET /apidboansell/rcdata/dhouse?69646661726d=1&6964686f757365=1");
+              client.print("GET /rcdata/dhouse?69646661726d=1&6964686f757365=1");
               client.print("&a64617461=");
               client.print(loopdt);
               client.println(" HTTP/1.1");
-              client.println("Host: 192.168.1.200");
+              client.println("Host: apidbo.anselljaya.com");
               client.println("Connection: close");
               client.println();
             } else {
@@ -269,7 +255,7 @@ void getDataCom(){
               digitalWrite(LEDmerah1, HIGH); //LEDmerah1 mati
               delay(500);
               digitalWrite(LEDmerah1, LOW); //LEDmerah1 mati
-              Serial.println("connection failed");
+              Serial.println("Gagal menghubungkan");
             }
 //End Run Ethernet
           
@@ -308,9 +294,10 @@ void getDataCom(){
 
 void setnettime(){
             char server2[] = "apidbo.anselljaya.com";
+             Serial.println("Menghubungkan ke Webserver");
             if (client.connect(server2, 80)) {
               digitalWrite(LEDmerah2, HIGH); //LEDmerah2 Nyala
-              Serial.print("Menghubungkan ke ");
+              Serial.print("Terhubung dengan ");
               Serial.println(client.remoteIP());
               // Make a HTTP request:
               client.println("GET /rcdata/nettime HTTP/1.1");
@@ -320,7 +307,7 @@ void setnettime(){
             } else {
               // if you couldn't make a connection:
               digitalWrite(LEDmerah2, LOW); //LEDmerah1 mati
-              Serial.println("Memutuskan hubungan");
+              Serial.println("Gagal menghubungkan");
             }
             //End Run Ethernet
           

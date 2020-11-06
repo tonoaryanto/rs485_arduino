@@ -1,8 +1,7 @@
 #include <SoftwareSerial.h>
-const int SSERIAL_RX_PIN = 10;  //Soft Serial Receive pin
-const int SSERIAL_TX_PIN = 11;  //Soft Serial Transmit pin
+const int SSERIAL_RX_PIN = 12;  //Soft Serial Receive pin
+const int SSERIAL_TX_PIN = 13;  //Soft Serial Transmit pin
 const int SSERIAL_CTRL_PIN= 3;   //RS485 Direction control
-const int LED_PIN = 13;
 const int RS485_TRANSMIT = HIGH;
 const int RS485_RECEIVE = LOW;
 
@@ -12,11 +11,7 @@ int byteReceived;
 
 void setup()
 {
-  Serial.begin(9600);           // Start the built-in serial port
-  Serial.println("Master Device");
-  Serial.println("Type in upper window, press ENTER");
-  
-  pinMode(LED_PIN, OUTPUT);     // Configure any output pins
+  Serial.begin(9600);           // Start the built-in serial port  
   pinMode(SSERIAL_CTRL_PIN, OUTPUT);    
   
   digitalWrite(SSERIAL_CTRL_PIN, RS485_RECEIVE);  // Put RS485 in receive mode  
@@ -41,10 +36,8 @@ void loop()
   
   if (RS485Serial.available())            //Data from the Slave is available
    {
-    digitalWrite(LED_PIN, HIGH);          // Show activity on LED
     byteReceived = RS485Serial.read();    // Read received byte
     Serial.write(byteReceived);           // Show on Serial Monitor
     //    delay(10);
-    digitalWrite(LED_PIN, LOW);           // Turn LED back off
    }  
 }
